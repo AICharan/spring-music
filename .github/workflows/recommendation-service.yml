@@ -1,0 +1,57 @@
+name: Recommendation Service CI
+
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - "recommendation-service/**"
+      - ".github/workflows/recommendation-service.yml"
+  pull_request:
+    paths:
+      - "recommendation-service/**"
+      - ".github/workflows/recommendation-service.yml"
+
+# Challenge 8 — The Pipeline:
+# This pipeline builds ONLY recommendation-service.
+# Independent of monolith and album-service pipelines.
+# See ADR-004-ci-independence.md
+
+jobs:
+  build-and-test:
+    name: Build & Test — recommendation-service
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-recommendation-${{ hashFiles('recommendation-service/build.gradle') }}
+          restore-keys: gradle-recommendation-
+
+      - name: Build recommendation-service
+        working-directory: recommendation-service
+        run: gradle clean assemble
+
+      - name: Run recommendation-service tests
+        working-directory: recommendation-service
+        run: gradle test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: recommendation-service-test-results
+          path: recommendation-service/build/reports/tests/test/
+          retention-days: 7

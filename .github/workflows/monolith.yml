@@ -1,0 +1,65 @@
+name: Monolith CI
+
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - "src/**"
+      - "build.gradle"
+      - "gradle.properties"
+      - "gradle/**"
+      - "gradlew"
+      - ".github/workflows/monolith.yml"
+  pull_request:
+    paths:
+      - "src/**"
+      - "build.gradle"
+      - "gradle.properties"
+      - "gradle/**"
+      - ".github/workflows/monolith.yml"
+
+# Challenge 8 — The Pipeline:
+# This pipeline builds ONLY the monolith.
+# A failure here does NOT block album-service or recommendation-service deployments.
+# See ADR-004-ci-independence.md
+
+jobs:
+  build-and-test:
+    name: Build & Test — spring-music monolith
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-monolith-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties', 'build.gradle') }}
+          restore-keys: gradle-monolith-
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Build monolith
+        run: ./gradlew clean assemble
+
+      - name: Run monolith tests
+        run: ./gradlew test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: monolith-test-results
+          path: build/reports/tests/test/
+          retention-days: 7

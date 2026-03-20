@@ -1,0 +1,61 @@
+name: Album Service CI
+
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - "album-service/**"
+      - ".github/workflows/album-service.yml"
+  pull_request:
+    paths:
+      - "album-service/**"
+      - ".github/workflows/album-service.yml"
+
+# Challenge 8 — The Pipeline:
+# This pipeline builds ONLY album-service.
+# A failure in monolith.yml does NOT block this pipeline.
+# See ADR-004-ci-independence.md
+
+jobs:
+  build-and-test:
+    name: Build & Test — album-service
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-album-service-${{ hashFiles('album-service/build.gradle') }}
+          restore-keys: gradle-album-service-
+
+      - name: Make gradlew executable
+        run: chmod +x album-service/gradlew
+        continue-on-error: true
+
+      - name: Build album-service
+        working-directory: album-service
+        run: gradle clean assemble
+
+      - name: Run album-service tests (including contract tests)
+        working-directory: album-service
+        run: gradle test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: album-service-test-results
+          path: album-service/build/reports/tests/test/
+          retention-days: 7

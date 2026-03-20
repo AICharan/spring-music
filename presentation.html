@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Team 17 — Spring Music Modernization & Decomposition</title>
+    <style>
+      :root {
+        --bg: #0d0d1a;
+        --surface: #13132b;
+        --border: #2a2a5a;
+        --accent: #7c6ff7;
+        --accent2: #e8912d;
+        --green: #34d399;
+        --red: #f87171;
+        --text: #e8e8f4;
+        --muted: #8888aa;
+        --code-bg: #1a1a3a;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Segoe UI", system-ui, sans-serif;
+        line-height: 1.5;
+        padding: 2rem;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .slide {
+        margin-bottom: 4rem;
+      }
+
+      h1 {
+        font-size: 2.4rem;
+        color: var(--accent);
+        margin-bottom: 0.3rem;
+      }
+      h2 {
+        font-size: 1.5rem;
+        color: var(--accent2);
+        margin: 2rem 0 1rem;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 0.4rem;
+      }
+      h3 {
+        font-size: 1.1rem;
+        color: var(--accent);
+        margin: 1rem 0 0.4rem;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        font-size: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.2rem;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-right: 6px;
+        margin-bottom: 4px;
+      }
+      .badge-done {
+        background: #064e3b;
+        color: var(--green);
+        border: 1px solid var(--green);
+      }
+      .badge-skip {
+        background: #1f2937;
+        color: var(--muted);
+        border: 1px solid var(--muted);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+      th {
+        text-align: left;
+        padding: 8px 12px;
+        background: var(--surface);
+        color: var(--muted);
+        border-bottom: 1px solid var(--border);
+      }
+      td {
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      code {
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 0 5px;
+        font-family: "Cascadia Code", "Fira Code", monospace;
+        font-size: 0.85em;
+        color: #a5b4fc;
+      }
+
+      pre {
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem;
+        overflow-x: auto;
+        font-family: "Cascadia Code", "Fira Code", monospace;
+        font-size: 0.82rem;
+        line-height: 1.6;
+        color: #c7d2fe;
+      }
+
+      .arch-diagram {
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.5rem;
+        font-family: monospace;
+        font-size: 0.88rem;
+        line-height: 2;
+        color: #c7d2fe;
+        text-align: center;
+      }
+
+      .highlight {
+        color: var(--accent2);
+        font-weight: 600;
+      }
+      .green {
+        color: var(--green);
+      }
+      .red {
+        color: var(--red);
+      }
+      .muted {
+        color: var(--muted);
+      }
+
+      .big-number {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--accent);
+        line-height: 1;
+      }
+      .big-label {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+      ul li {
+        padding: 4px 0;
+        padding-left: 1.2rem;
+        position: relative;
+      }
+      ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+      }
+
+      .divider {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 2rem 0;
+      }
+
+      .tag {
+        background: #1e1a4a;
+        border: 1px solid var(--accent);
+        border-radius: 4px;
+        padding: 2px 8px;
+        font-size: 0.78rem;
+        color: var(--accent);
+        margin-right: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SLIDE 1: Title -->
+    <div class="slide">
+      <h1>Team 17 — Spring Music</h1>
+      <p class="subtitle">
+        Scenario 1: Code Modernization &amp; Decomposition &nbsp;·&nbsp; APAC
+        Claude Code Workshop
+      </p>
+
+      <div class="grid-3">
+        <div class="card" style="text-align: center">
+          <div class="big-number">9/10</div>
+          <div class="big-label">Challenges completed</div>
+        </div>
+        <div class="card" style="text-align: center">
+          <div class="big-number">3</div>
+          <div class="big-label">Runnable services</div>
+        </div>
+        <div class="card" style="text-align: center">
+          <div class="big-number">15+</div>
+          <div class="big-label">
+            Tests (characterization, contract, integration)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: The Problem -->
+    <div class="slide">
+      <h2>The Problem</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Spring Music (before)</h3>
+          <ul>
+            <li>Spring Boot 2.4.0 — 3 years behind EOL</li>
+            <li><code>javax.*</code> — incompatible with Jakarta EE 10</li>
+            <li><code>jcenter()</code> — shut down 2022, builds fail</li>
+            <li>
+              1 test: <code>contextLoads()</code> — zero behavioral coverage
+            </li>
+            <li>Logger string concatenation — allocates on every call</li>
+            <li>
+              Multi-backend repo: single <code>Album</code> class as God object
+            </li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>The Challenge</h3>
+          <p style="margin-bottom: 1rem">
+            Prove modernization is possible without a big-bang rewrite. Then
+            find the seams and start extracting.
+          </p>
+          <p><span class="tag">PM</span> Story writing</p>
+          <p style="margin-top: 8px">
+            <span class="tag">Architect</span> Decomposition map
+          </p>
+          <p style="margin-top: 8px">
+            <span class="tag">Tester</span> Characterization + contract
+          </p>
+          <p style="margin-top: 8px">
+            <span class="tag">Dev</span> Service extraction
+          </p>
+          <p style="margin-top: 8px">
+            <span class="tag">Infra</span> CI/CD + runbook
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Architecture -->
+    <div class="slide">
+      <h2>What We Built — Architecture</h2>
+
+      <div class="arch-diagram">
+        <span class="muted"
+          >Phase 1 (existing)
+          ──────────────────────────────────────────────────────</span
+        ><br /><br />
+        <span style="color: #a5b4fc">[ Browser ]</span>
+        &nbsp;→&nbsp;
+        <span style="color: var(--accent2)"
+          >[ spring-music monolith :8080 ]</span
+        >
+        &nbsp;→&nbsp;
+        <span style="color: var(--green)"
+          >[ H2 / MySQL / Postgres / Mongo / Redis ]</span
+        ><br /><br />
+        <span class="muted"
+          >Phase 2 (this session)
+          ─────────────────────────────────────────────────</span
+        ><br /><br />
+        <span style="color: #a5b4fc">[ Any HTTP client ]</span>
+        &nbsp;→&nbsp;
+        <span style="color: var(--accent)">[ album-service :8081 ]</span>
+        &nbsp;→&nbsp;
+        <span style="color: var(--green)">[ H2 ]</span><br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="muted">↓ AlbumCreatedEvent (after tx commit)</span><br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span style="color: var(--accent2)"
+          >[ recommendation-service :8082 ]</span
+        >
+        &nbsp;→&nbsp;
+        <span style="color: var(--green)">[ in-memory ring buffer ]</span>
+      </div>
+
+      <div class="grid-3" style="margin-top: 1.5rem">
+        <div class="card">
+          <h3>Monolith (unchanged)</h3>
+          <ul>
+            <li>Spring Boot 3.2.3</li>
+            <li>Multi-backend profiles</li>
+            <li>CF service detection</li>
+            <li>Port 8080</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>album-service (new)</h3>
+          <ul>
+            <li>Own <code>AlbumEntity</code></li>
+            <li><code>AlbumPayload</code> ACL DTO</li>
+            <li>Publishes <code>AlbumCreatedEvent</code></li>
+            <li>Port 8081</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>recommendation-service (new)</h3>
+          <ul>
+            <li>Receives events via HTTP</li>
+            <li>Idempotent (dedup by id)</li>
+            <li>20-item sliding window</li>
+            <li>Port 8082</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Challenges status -->
+    <div class="slide">
+      <h2>Challenges Completed</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Challenge</th>
+            <th>Status</th>
+            <th>Key deliverable</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>The Stories</td>
+            <td><span class="badge badge-done">done</span></td>
+            <td>
+              3 user stories, AC table, in
+              <code>decisions/01-user-stories.md</code>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>The Patient</td>
+            <td><span class="badge badge-skip">skipped</span></td>
+            <td>Used spring-music starter (as instructed)</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>The Map</td>
+            <td><span class="badge badge-done">done</span></td>
+            <td>5 seams identified, ranked by extraction risk</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>The Pin</td>
+            <td><span class="badge badge-done">done</span></td>
+            <td>
+              9 characterization tests — quirks pinned before any structural
+              changes
+            </td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>The Cut</td>
+            <td><span class="badge badge-done">done</span></td>
+            <td>
+              <code>album-service</code> extracted; monolith unchanged; both
+              start
+            </td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>The Fence</td>
+            <td><span class="badge badge-done">done</span></td>
+            <td>
+              <code>AlbumPayload</code> ACL DTO + <code>AlbumTranslator</code>;
+              zero monolith imports
+            </td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>The Contract</td>
+            <td><span class="badge badge-done">done</span></td>
+            <td>Provider + consumer test pair; divergence documented</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>The Pipeline</td>
+            <td><span class="badge badge-done">done</span></td>
+            <td>3 independent GitHub Actions workflows with path filters</td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td>The Second Cut</td>
+            <td><span class="badge badge-done">done</span></td>
+            <td>Event-driven; dual-write documented; idempotent consumer</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>The Weekend</td>
+            <td><span class="badge badge-done">done</span></td>
+            <td>5-step runbook, rollback triggers, 3am decision tree</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SLIDE 5: Key Architecture Decisions -->
+    <div class="slide">
+      <h2>Key Architecture Decisions</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>ADR-001: Strangler Fig</h3>
+          <p>
+            New services run alongside the monolith. One routing rule = instant
+            rollback. No code change required for rollback.
+          </p>
+          <p style="margin-top: 8px" class="muted">
+            Rejected: big-bang rewrite (zero trust in feature parity)
+          </p>
+        </div>
+        <div class="card">
+          <h3>ADR-002: ACL Pattern</h3>
+          <p>
+            <code>AlbumPayload</code> is the only shared contract.
+            <code>AlbumTranslator</code> is the ONLY place the two
+            representations meet.
+          </p>
+          <pre style="margin-top: 8px">
+Album (monolith JPA)
+  ↕ AlbumPayload (ACL)
+AlbumEntity (service JPA)</pre
+          >
+        </div>
+        <div class="card">
+          <h3>ADR-003: Dual-Write</h3>
+          <p>
+            Current: <code>@TransactionalEventListener</code> after commit →
+            HTTP relay. At-most-once. Event may be lost.
+          </p>
+          <p style="margin-top: 8px">
+            Prescribed: <span class="highlight">Outbox pattern</span> — event
+            written to DB in same transaction. No Kafka needed.
+          </p>
+        </div>
+        <div class="card">
+          <h3>ADR-004: Independent CI</h3>
+          <p>
+            Path-filtered GitHub Actions. A broken monolith does
+            <span class="red">NOT</span> block album-service deployment.
+          </p>
+          <pre style="margin-top: 8px">
+monolith.yml    → src/**
+album-service.yml → album-service/**
+recommendation.yml → recommendation-service/**</pre
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Contract Test Insight -->
+    <div class="slide">
+      <h2>The Contract Test Insight</h2>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 class="red">Monolith (documented quirk)</h3>
+          <pre>
+GET /albums/nonexistent-id
+→ HTTP 200
+→ body: ""  (empty string)</pre
+          >
+          <p style="margin-top: 0.8rem" class="muted">
+            AlbumController.getById() returns null → Spring serialises as empty
+            response
+          </p>
+        </div>
+        <div class="card">
+          <h3 class="green">album-service (correct REST)</h3>
+          <pre>
+GET /albums/nonexistent-id
+→ HTTP 404
+→ body: (none)</pre
+          >
+          <p style="margin-top: 0.8rem" class="muted">
+            ResponseEntity.notFound().build() — correct semantics
+          </p>
+        </div>
+      </div>
+
+      <p style="margin-top: 1.5rem">
+        The contract test surfaced this divergence and
+        <strong>documented it</strong> rather than hiding it. The monolith's
+        quirk is pinned by a characterization test. The fix
+        (<code>@ResponseStatus(NOT_FOUND)</code>) is in the "If We Had Another
+        Day" list — safe to ship without breaking anything.
+      </p>
+    </div>
+
+    <!-- SLIDE 7: How We Used Claude Code -->
+    <div class="slide">
+      <h2>How We Used Claude Code</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>What saved the most time</h3>
+          <ul>
+            <li>
+              Full codebase scan in one pass — all quirks enumerated before
+              writing a test
+            </li>
+            <li>
+              ADR drafting from a decision question — trade-off analysis in
+              seconds
+            </li>
+            <li>3 services + 3 CI pipelines + runbook in one session</li>
+            <li>
+              Two-sided contract test structure — surfaced the 404 vs 200
+              divergence automatically
+            </li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>What surprised us</h3>
+          <ul>
+            <li>
+              Claude Code suggested <code>@TransactionalEventListener</code>
+              <em>unprompted</em> as safer than a plain
+              <code>@EventListener</code>
+            </li>
+            <li>
+              CLAUDE.md doubles as a living ADR store — future sessions have
+              full context
+            </li>
+            <li>
+              Characterization tests are better written by asking "what are the
+              quirks" than "write tests for this code"
+            </li>
+            <li>
+              The runbook's 3am decision tree was the fastest file to write —
+              Claude understands ops scenarios
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: What's Next -->
+    <div class="slide">
+      <h2>If We Had Another Day</h2>
+      <ol style="list-style: decimal; padding-left: 1.5rem">
+        <li style="margin-bottom: 0.6rem">
+          <strong>Outbox pattern</strong> — replace at-most-once relay with
+          guaranteed at-least-once delivery (H2 outbox table, no Kafka)
+        </li>
+        <li style="margin-bottom: 0.6rem">
+          <strong>Docker Compose</strong> — one command to start all three
+          services; data migration runs automatically
+        </li>
+        <li style="margin-bottom: 0.6rem">
+          <strong>API Gateway</strong> — nginx config to implement the strangler
+          fig routing rule (5% → 50% → 100%)
+        </li>
+        <li style="margin-bottom: 0.6rem">
+          <strong>Fix the 404 quirk</strong> —
+          <code>@ResponseStatus(NOT_FOUND)</code> on monolith's
+          <code>getById</code>; update characterization test to expect 404; both
+          services aligned
+        </li>
+        <li style="margin-bottom: 0.6rem">
+          <strong>Platform info service</strong> — extract
+          <code>InfoController</code> + CF detection; remove
+          <code>java-cfenv-boot</code> from the album domain
+        </li>
+      </ol>
+
+      <hr class="divider" />
+      <p style="text-align: center; color: var(--muted)">
+        Team 17 &nbsp;·&nbsp; Charan Raghupatruni &nbsp;·&nbsp; Scenario 1: Code
+        Modernization
+      </p>
+    </div>
+  </body>
+</html>
